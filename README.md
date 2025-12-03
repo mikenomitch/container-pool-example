@@ -232,22 +232,6 @@ Adjust pool behavior via environment variables in `wrangler.jsonc`:
 }
 ```
 
-### Container Resources
-
-Configure container resources in `wrangler.jsonc`:
-
-```jsonc
-{
-  "containers": [{
-    "configuration": {
-      "vcpu": 0.25,        // CPU allocation
-      "memory_mib": 256,   // Memory in MiB
-      "disk": {"size_mb": 512}  // Disk space
-    }
-  }]
-}
-```
-
 ## Development
 
 ### Local Development
