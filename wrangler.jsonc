@@ -1,0 +1,53 @@
+/**
+ * For more details on how to configure Wrangler, refer to:
+ * https://developers.cloudflare.com/workers/wrangler/configuration/
+ */
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "container-pool",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-07-05",
+	"observability": {
+		"enabled": true,
+	},
+	"vars": {
+		"POOL_TARGET_INSTANCES": "30",
+		"POOL_BATCH_SIZE": "10",
+		"POOL_BATCH_SPACING_IN_SECONDS": "10",
+	},
+	"containers": [
+		{
+			"class_name": "PoolContainer",
+			"image": "./Dockerfile",
+			"max_instances": 1000,
+			"name": "pool-container",
+			"scheduling_policy": "default",
+			"instance_type": "standard"
+		}
+	],
+	"migrations": [
+		{
+			"new_sqlite_classes": ["PoolManager", "PoolContainer"],
+			"tag": "v1"
+		}
+	],
+	"durable_objects": {
+		"bindings": [
+			{
+				"class_name": "PoolManager",
+				"name": "POOL_MANAGER"
+			},
+			{
+				"class_name": "PoolContainer",
+				"name": "POOL_CONTAINER"
+			}
+		]
+	},
+	"rules": [
+		{
+			"globs": ["**/*.sql"],
+			"type": "Text",
+			"fallthrough": true
+		}
+	]
+}
